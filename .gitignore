@@ -1,2 +1,3 @@
 .venv
 data/creditcard.csv
+data/*.csv

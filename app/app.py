@@ -5,6 +5,7 @@ import numpy as np
 
 # Load trained model & scaler
 model = joblib.load("../notebook/isolation_forest_model.pkl")
+model1 = joblib.load("../notebook/random_forest_fraud_model.pkl")
 scaler = joblib.load("../notebook/scaler.pkl")
 
 st.set_page_config(page_title="Fraud Anomaly Detection", layout="centered")
@@ -57,15 +58,33 @@ if uploaded_file is not None:
     #  1 → Normal
     # -1 → Anomaly
     data["Anomaly"] = np.where(preds == -1, 1, 0)
+    
+    # Fraud Prediction using Random Forest Model
+    data["fraud"] = 0
+    data["fraud_probability"] = 0.0
+    
+    suspicious_idx = data[data["Anomaly"] == 1].index
+    
+    if len(suspicious_idx) > 0:
+        fraud_probs = model1.predict_proba(
+            data_scaled[suspicious_idx]
+        )[:, 1]
+        fraud_preds = (fraud_probs >= 0.5).astype(int)
+        
+        data.loc[suspicious_idx, "fraud"] = fraud_preds
+        data.loc[suspicious_idx, "fraud_probability"] = fraud_probs
 
-    anomaly_count = data["Anomaly"].sum()
+    # Summary results
     total = len(data)
+    anomaly_count = data["Anomaly"].sum()
     anomaly_percent = (anomaly_count / total) * 100
+    fraud_count = data["fraud"].sum()
 
     # Results
     st.success(f"Total Transactions: {total}")
     st.warning(f"Detected Anomalies: {anomaly_count}")
     st.info(f"Anomaly Percentage: {anomaly_percent:.2f}%")
+    st.error(f"Confirmed Fraud Transactions: {fraud_count}")
 
     # Show anomalies
     if anomaly_count > 0:
@@ -73,4 +92,22 @@ if uploaded_file is not None:
         st.dataframe(data[data["Anomaly"] == 1].head(50))
     else:
         st.subheader("No anomalies detected")
+        
+    # Display full results for download
+    st.subheader("Full Results")
+    st.dataframe(
+        data.sort_values(
+            by=["fraud", "fraud_probability"],
+            ascending=False
+        ).head(50)
+    )
+    
+    # Download link
+    csv = data.to_csv(index=False).encode()
+    st.download_button(
+        label="Download Full Results as CSV",
+        data=csv,
+        file_name="anomaly_detection_results.csv",
+        mime="text/csv",
+    )
 

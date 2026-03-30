@@ -3,19 +3,19 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# Load trained model & scaler
+
 model = joblib.load("../notebook/isolation_forest_model.pkl")
 model1 = joblib.load("../notebook/random_forest_fraud_model.pkl")
 scaler = joblib.load("../notebook/scaler.pkl")
 
 st.set_page_config(page_title="Fraud Anomaly Detection", layout="centered")
-st.title("Credit Card Anomaly Detection System")
+st.title("Credit Card Anomaly and Fraud Detection System")
 
 st.write(
     """
     Upload a CSV file containing credit card transaction data.
-    The system will detect **anomalous (suspicious) transactions**
-    using an **Isolation Forest model**.
+    The system will detect **anomalous (suspicious) transactions or Fraud transaction**
+    using an **Isolation Forest model(Anomalous)** and **Random Forest model(Fraud)**.
     """
 )
 
@@ -55,8 +55,6 @@ if uploaded_file is not None:
     preds = model.predict(data_scaled)
 
     # Convert predictions
-    #  1 → Normal
-    # -1 → Anomaly
     data["Anomaly"] = np.where(preds == -1, 1, 0)
     
     # Fraud Prediction using Random Forest Model
@@ -79,17 +77,19 @@ if uploaded_file is not None:
     anomaly_count = data["Anomaly"].sum()
     anomaly_percent = (anomaly_count / total) * 100
     fraud_count = data["fraud"].sum()
+    fraud_precent = (fraud_count / total) * 100
 
     # Results
     st.success(f"Total Transactions: {total}")
     st.warning(f"Detected Anomalies: {anomaly_count}")
     st.info(f"Anomaly Percentage: {anomaly_percent:.2f}%")
     st.error(f"Confirmed Fraud Transactions: {fraud_count}")
+    st.error(f"Fraud Percentage: {fraud_precent:.4f}%")
 
     # Show anomalies
     if anomaly_count > 0:
         st.subheader("Detected Anomalous Transactions")
-        st.dataframe(data[data["Anomaly"] == 1].head(50))
+        st.dataframe(data[data["Anomaly"] == 1])
     else:
         st.subheader("No anomalies detected")
         
@@ -107,7 +107,7 @@ if uploaded_file is not None:
     st.download_button(
         label="Download Full Results as CSV",
         data=csv,
-        file_name="anomaly_detection_results.csv",
+        file_name="Fraud_detection_results.csv",
         mime="text/csv",
     )
 

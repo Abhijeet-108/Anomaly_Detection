@@ -398,6 +398,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.divider()
+
 p1, p2, p3 = st.columns(3)
 with p1:
     st.markdown(
@@ -421,15 +423,26 @@ with p3:
         unsafe_allow_html=True,
     )
 
+users = _load_users()
+current_user = users.get(st.session_state.user_email, {})
+
+plan = current_user.get("plan", "free")
+
+if plan == "premium":
+    upload_label = "Drop your CSV here (Max 200 MB)"
+else:
+    upload_label = "Drop your CSV here (Max 100 MB)"
+
+
 st.markdown('<div class="section-title">Upload Data</div>', unsafe_allow_html=True)
 uploaded = st.file_uploader(
-    "Drop your CSV here",
+    upload_label,
     type=["csv"],
     help="Must include V1–V28 and Amount. Class/id columns are ignored.",
 )
 
-users = _load_users()
-current_user = users.get(st.session_state.user_email, {})
+# users = _load_users()
+# current_user = users.get(st.session_state.user_email, {})
 
 free_limit = current_user.get("max_free_predictions", 3)
 used = current_user.get("prediction_count", 0)
@@ -447,8 +460,22 @@ if (
 
     st.stop()
 
-if uploaded:
+if uploaded is not None:
+
+    file_size = uploaded.size/(1024 * 1024)
     
+    if plan == "premium":
+        max_size = 200
+    else:
+        max_size = 100
+        
+    if file_size > max_size:
+        st.error(
+            f"Your {plan} plan allows files up to {max_size} MB. "
+            f"Uploaded file is {file_size:.2f} MB."
+        )
+        st.stop()
+
     users = _load_users()
     current_user = users.get(
         st.session_state.user_email,

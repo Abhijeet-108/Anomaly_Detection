@@ -1,29 +1,11 @@
 {
-  "donga@gmail.com": {
-    "name": "Donga Kumar",
-    "password": "430378e741419496c763ec60586d37c6$70ac89d913df9f0fd63b4e18d03d5d7bd7fb9f4f09ce1f8e95910d119153ea2b",
-    "age": 22,
-    "plan": "free",
-    "subscription_expiry": null,
-    "prediction_count": 1,
-    "max_free_predictions": 3
-  },
-  "abhi@gmail.com": {
-    "name": "Abhi Kumar",
-    "password": "973309bda35fe25d3520c920171c5fba$b8b13cdcdae7f10e0c2bb13e57220569b22df18fb11be6ff1f5d8f046314de38",
-    "age": 22,
-    "plan": "free",
-    "subscription_expiry": null,
-    "prediction_count": 0,
-    "max_free_predictions": 3
-  },
-  "abhij@gmail.com": {
-    "name": "Abhi",
-    "password": "3801384e92e241963c91583605f55b48$f5ceea4ddcd35c797ed6e06c6a30103bb3a37a75a479425d694e89db09db129e",
+  "abhishek@gmail.com": {
+    "name": "Abhishek",
+    "password": "d45f0446763c120b447e50ed80693f7e$66fbe7d1bc64c991a7a12abd02db208e31656d4fefca9e5a0ae7ebc2b950041f",
     "age": 18,
     "plan": "free",
     "subscription_expiry": null,
-    "prediction_count": 3,
+    "prediction_count": 0,
     "max_free_predictions": 3
   }
 }

@@ -7,5 +7,14 @@
     "subscription_expiry": null,
     "prediction_count": 0,
     "max_free_predictions": 3
+  },
+  "ism@gmail.com": {
+    "name": "ism",
+    "password": "8ffde78d38506d3ca078092bcc46c276$59c69cd78424b93bc7a18fdf586558c43031d25c935fd8057d197270557bf38e",
+    "age": 20,
+    "plan": "free",
+    "subscription_expiry": null,
+    "prediction_count": 0,
+    "max_free_predictions": 3
   }
 }

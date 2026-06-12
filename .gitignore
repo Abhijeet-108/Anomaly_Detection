@@ -1,3 +1,5 @@
 .venv
 data/creditcard.csv
 data/*.csv
+env
+.env

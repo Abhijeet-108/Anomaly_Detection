@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+import razorpay as rp
+
 from auth import (
     init_session, 
     logout, 
@@ -311,6 +313,12 @@ default_threshold = float(metadata.get("fraud_threshold", 0.5))
 metrics = metadata.get("metrics", {})
 expected_features = list(metadata.get("features", scaler.feature_names_in_))
 
+# ── payment client ───────────────────────────────────────────────────────────────────
+
+client = rp.Client(
+    auth = ()
+)
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🛡️ KAVACA Pay")
@@ -339,10 +347,33 @@ with st.sidebar:
 
         st.warning(f"{remaining} free scans left")
 
+        payment_link = client.payment_link.create({
+            'amount': 100,
+            'currency':'INR',
+            'accept_partial':False,
+            'description':'Premium Subscription',
+            'customer':{
+                'name':'Customer',
+                    
+            },
+            'notify':{
+                'sms':False,
+                'email':False
+            }
+        })  
+
         st.link_button(
             "Upgrade to Premium",
-            "https://github.com/Abhijeet-108"
-        )
+            payment_link['short_url']
+            )
+#            lin = str(payment_link['short_url'])
+ #           st.link_button("Pay Now",lin)     
+            # st.markdown(
+            #     f"[Pay Now]({payment_link['short_url']})",
+            #     unsafe_allow_html = True
+            # )
+
+
         
     st.divider()
 
@@ -455,7 +486,20 @@ if (
 
     st.link_button(
         "Upgrade to Premium",
-        "YOUR_RAZORPAY_PAYMENT_LINK"
+        payment_link = client.payment_link.create({
+                'amount': 100,
+                'currency':'INR',
+                'accept_partial':False,
+                'description':'Premium Subscription',
+                'customer':{
+                    'name':'Customer',
+                    
+                },
+                'notify':{
+                    'sms':False,
+                    'email':False
+                }
+            }) 
     )
 
     st.stop()

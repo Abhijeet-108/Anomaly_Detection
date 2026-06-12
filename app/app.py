@@ -316,7 +316,7 @@ expected_features = list(metadata.get("features", scaler.feature_names_in_))
 # ── payment client ───────────────────────────────────────────────────────────────────
 
 client = rp.Client(
-    auth = ()
+    auth = ("", "")
 )
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -347,32 +347,49 @@ with st.sidebar:
 
         st.warning(f"{remaining} free scans left")
 
-        payment_link = client.payment_link.create({
-            'amount': 100,
-            'currency':'INR',
-            'accept_partial':False,
-            'description':'Premium Subscription',
-            'customer':{
-                'name':'Customer',
-                    
-            },
-            'notify':{
-                'sms':False,
-                'email':False
-            }
-        })  
+        if st.button("Upgrade to Premium"):
 
-        st.link_button(
-            "Upgrade to Premium",
-            payment_link['short_url']
+            payment_link = client.payment_link.create({
+                "amount": 9900,      # ₹99
+                "currency": "INR",
+                "description": "Premium Subscription",
+                "customer": {
+                    "name": current_user["name"]
+                }
+            })
+
+            current_user["payment_link_id"] = payment_link["id"]
+            current_user["payment_status"] = "pending"
+
+            users[st.session_state.user_email] = current_user
+            _save_users(users)
+
+            st.link_button(
+                "Pay Now",
+                payment_link["short_url"]
             )
-#            lin = str(payment_link['short_url'])
- #           st.link_button("Pay Now",lin)     
-            # st.markdown(
-            #     f"[Pay Now]({payment_link['short_url']})",
-            #     unsafe_allow_html = True
-            # )
+        
+            if st.button("verify Payment"):
+                link_id = current_user.get("payment_link_id")
 
+                if not link_id:
+                    st.error("No payment found.")
+                    st.stop()
+
+                payment = client.payment_link.fetch(link_id)
+
+                status = payment["status"]
+                if status == "paid":
+                    current_user["plan"] = "premium"
+                    current_user["payment_status"] = "paid"
+
+                    users[st.session_state.user_email] = current_user
+                    _save_users(users)
+
+                    st.success("Premium Activated!")
+
+                else:
+                    st.warning(f"Payment Status: {status}")
 
         
     st.divider()

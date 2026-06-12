@@ -1,20 +1,35 @@
 {
-  "abhishek@gmail.com": {
-    "name": "Abhishek",
-    "password": "d45f0446763c120b447e50ed80693f7e$66fbe7d1bc64c991a7a12abd02db208e31656d4fefca9e5a0ae7ebc2b950041f",
+  "abhijeet@gmail.com": {
+    "name": "Abhijeet",
+    "password": "47e28a8f324e01a1dbd277cca629e0d2$b579c39d9e24674e5f9dad10246e3f949dc03a4c81d5d402aaada0be3ba9e893",
+    "age": 21,
+    "plan": "free",
+    "subscription_expiry": null,
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": null,
+    "payment_status": "pending"
+  },
+  "adarsh@gmail.com": {
+    "name": "Adarsh",
+    "password": "e3ddafb160da01fad998aa1593c6e243$ae3c71b7e64f3ecdca591d535e4db38123488021f9f3c556b014c78ffce7d073",
+    "age": 21,
+    "plan": "premium",
+    "subscription_expiry": null,
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T0q0nahdUv7c0K",
+    "payment_status": "paid"
+  },
+  "abhi@gmail.com": {
+    "name": "abhishek",
+    "password": "6fea7afdf06d635491a3879f99133550$96fec1f9d37de08fd088da34d676ef2b8eb9e958cb6b31f4a69798ed52834bca",
     "age": 18,
     "plan": "free",
     "subscription_expiry": null,
     "prediction_count": 0,
-    "max_free_predictions": 3
-  },
-  "ism@gmail.com": {
-    "name": "ism",
-    "password": "8ffde78d38506d3ca078092bcc46c276$59c69cd78424b93bc7a18fdf586558c43031d25c935fd8057d197270557bf38e",
-    "age": 20,
-    "plan": "free",
-    "subscription_expiry": null,
-    "prediction_count": 0,
-    "max_free_predictions": 3
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T0q8MW4uyYQkHi",
+    "payment_status": "pending"
   }
 }

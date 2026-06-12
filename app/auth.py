@@ -21,6 +21,8 @@ def init_session():
         "user_plan": "free",
         "subscription_expiry": None,
         "prediction_count": 0,
+        "payment_link_id": None,
+        "payment_status": "pending"
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -79,7 +81,9 @@ def signup(name: str, email: str, password: str, age: int):
         "plan": "free",
         "subscription_expiry": None,
         "prediction_count": 0,
-        "max_free_predictions": 3
+        "max_free_predictions": 3,
+        "payment_link_id": None,
+        "payment_status": "pending"
     }
     _save_users(users)
     return True, "Account created successfully. Please log in."
@@ -117,7 +121,7 @@ def render_auth_page():
         <div class="auth-wrap">
             <div class="auth-header">
                 <div class="hero-badge"><span>●</span> Secure Access</div>
-                <h1>Welcome to ShieldPay</h1>
+                <h1>Welcome to Kavaca Pay</h1>
                 <p>Sign in or create an account to access the fraud detection dashboard.</p>
             </div>
         </div>

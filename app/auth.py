@@ -22,11 +22,29 @@ def init_session():
         "subscription_expiry": None,
         "prediction_count": 0,
         "payment_link_id": None,
-        "payment_status": "pending"
+        "payment_status": "pending",
     }
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+    
+    if not st.session_state.authenticated:
+        users = _load_users()
+        
+        for email, user in users.items():
+            if user.get("last_login", False):
+
+                st.session_state.authenticated = True
+                st.session_state.user_email = email
+                st.session_state.user_name = user["name"]
+                st.session_state.user_age = user["age"]
+
+                st.session_state.user_plan = user.get("plan", "free")
+                st.session_state.subscription_expiry = user.get(
+                    "subscription_expiry"
+                )
+
+                break
 
 
 def _load_users():
@@ -83,7 +101,8 @@ def signup(name: str, email: str, password: str, age: int):
         "prediction_count": 0,
         "max_free_predictions": 3,
         "payment_link_id": None,
-        "payment_status": "pending"
+        "payment_status": "pending",
+        "last_login": False
     }
     _save_users(users)
     return True, "Account created successfully. Please log in."
@@ -97,22 +116,38 @@ def login(email: str, password: str):
     if not user or not _verify_password(password, user["password"]):
         return False, "Invalid email or password."
 
+    for user in users.values():
+        user["last_login"] = False
+
+    users[email]["last_login"] = True
+    _save_users(users)
+
     st.session_state.authenticated = True
     st.session_state.user_email = email
     st.session_state.user_name = user["name"]
     st.session_state.user_age = user["age"]
-    
+
     st.session_state.user_plan = user.get("plan", "free")
     st.session_state.subscription_expiry = user.get("subscription_expiry")
-    
+
     return True, "Logged in successfully."
 
 
 def logout():
+    users = _load_users()
+
+    email = st.session_state.user_email
+
+    if email in users:
+        users[email]["last_login"] = False
+        _save_users(users)
+
     st.session_state.authenticated = False
     st.session_state.user_email = ""
     st.session_state.user_name = ""
     st.session_state.user_age = None
+    st.session_state.user_plan = "free"
+    st.session_state.subscription_expiry = None
 
 
 def render_auth_page():

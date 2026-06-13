@@ -5,8 +5,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import streamlit as st
-
 import razorpay as rp
+from datetime import datetime, timedelta
+
+expiry = (
+    datetime.now() +
+    timedelta(days=30)
+).strftime("%Y-%m-%d")
 
 from auth import (
     init_session, 
@@ -316,7 +321,7 @@ expected_features = list(metadata.get("features", scaler.feature_names_in_))
 # ── payment client ───────────────────────────────────────────────────────────────────
 
 client = rp.Client(
-    auth = ("", "")
+    auth = ()
 )
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -346,17 +351,21 @@ with st.sidebar:
         )
 
         st.warning(f"{remaining} free scans left")
+        
+        payment_link = client.payment_link.create({
+            "amount": 9900,     
+            "currency": "INR",
+            "description": "Premium Subscription",
+            "customer": {
+                "name": current_user["name"]
+            },
+            'notify':{
+                'sms': True,
+                'email': True
+            }
+        })
 
         if st.button("Upgrade to Premium"):
-
-            payment_link = client.payment_link.create({
-                "amount": 9900,      # ₹99
-                "currency": "INR",
-                "description": "Premium Subscription",
-                "customer": {
-                    "name": current_user["name"]
-                }
-            })
 
             current_user["payment_link_id"] = payment_link["id"]
             current_user["payment_status"] = "pending"
@@ -369,27 +378,28 @@ with st.sidebar:
                 payment_link["short_url"]
             )
         
-            if st.button("verify Payment"):
-                link_id = current_user.get("payment_link_id")
+        if st.button("verify Payment"):
+            link_id = current_user.get("payment_link_id")
 
-                if not link_id:
-                    st.error("No payment found.")
-                    st.stop()
+            if not link_id:
+                st.error("No payment found.")
+                st.stop()
 
-                payment = client.payment_link.fetch(link_id)
+            payment = client.payment_link.fetch(link_id)
 
-                status = payment["status"]
-                if status == "paid":
-                    current_user["plan"] = "premium"
-                    current_user["payment_status"] = "paid"
+            status = payment["status"]
+            if status == "paid":
+                current_user["plan"] = "premium"
+                current_user["payment_status"] = "paid"
+                current_user["subscription_expiry"] = expiry
 
-                    users[st.session_state.user_email] = current_user
-                    _save_users(users)
+                users[st.session_state.user_email] = current_user
+                _save_users(users)
 
-                    st.success("Premium Activated!")
+                st.success("Premium Activated!")
 
-                else:
-                    st.warning(f"Payment Status: {status}")
+            else:
+                st.warning(f"Payment Status: {status}")
 
         
     st.divider()

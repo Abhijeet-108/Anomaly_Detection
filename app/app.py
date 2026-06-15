@@ -321,7 +321,7 @@ expected_features = list(metadata.get("features", scaler.feature_names_in_))
 # ── payment client ───────────────────────────────────────────────────────────────────
 
 client = rp.Client(
-    auth = ()
+    auth = ("rzp_test_T0OrkKiRTWuC7e","3XydV5De1OkNYz4wWBdTGRNX")
 )
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────

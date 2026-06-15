@@ -9,6 +9,54 @@
     "max_free_predictions": 3,
     "payment_link_id": "plink_T12If8SChYbrls",
     "payment_status": "paid",
+    "last_login": false
+  },
+  "ism@gmail.com": {
+    "name": "ism",
+    "password": "7cc2dd335f3c84a359ae6fcc56c222c0$2d5382d7b7c177dc985bad08a9d6d5a52d77c59b1e2ec3bbb6f1d5b8dcd68a95",
+    "age": 18,
+    "plan": "premium",
+    "subscription_expiry": "2026-07-15",
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T1orL2aFKDvsJW",
+    "payment_status": "paid",
+    "last_login": false
+  },
+  "ism1@gmail.com": {
+    "name": "ism G",
+    "password": "d98b8bbbf8b98f462eaba5cfe2c92629$bbd723383ca3a09a5b49c807bdf9b00b527b959574bcf2471014cae3bedddca9",
+    "age": 18,
+    "plan": "premium",
+    "subscription_expiry": "2026-07-15",
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T1yZboXrDihELY",
+    "payment_status": "paid",
+    "last_login": false
+  },
+  "ism2@gmail.com": {
+    "name": "ism Ga",
+    "password": "b363c04274fd170588dee34a3da1862e$d01f6dbb2a6381fa75a2a9232f92c5fa0ea2859780ba60e3ad2845dc25dabecd",
+    "age": 18,
+    "plan": "premium",
+    "subscription_expiry": "2026-07-15",
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T1ypt05ZCxtVnL",
+    "payment_status": "paid",
+    "last_login": false
+  },
+  "ism3@gmail.com": {
+    "name": "ism Gam",
+    "password": "df65a22845688a0821eda7b6d09c5683$73bcd10c723faeb11f16070874b859cb0b2ebe9b94801661e6723f97a16cdbe6",
+    "age": 18,
+    "plan": "premium",
+    "subscription_expiry": "2026-07-15",
+    "prediction_count": 0,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_T1zAK3FjH35i8F",
+    "payment_status": "paid",
     "last_login": true
   }
 }

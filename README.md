@@ -78,7 +78,6 @@ Anomaly_Detection/
 ├── notebook/
 │   ├── train_models.py        # Script to train and save ML models
 │   ├── anomaly_detection.ipynb           # EDA + model experimentation
-│   ├── credit-card-fraud-detection-predictive-models.ipynb  # Reference EDA & benchmark models
 │   ├── isolation_forest_model.pkl        # (generated after training)
 │   ├── random_forest_fraud_model.pkl       # (generated after training)
 │   ├── scaler.pkl                          # (generated after training)

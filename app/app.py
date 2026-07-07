@@ -352,55 +352,62 @@ with st.sidebar:
 
         st.warning(f"{remaining} free scans left")
         
-        payment_link = client.payment_link.create({
-            "amount": 9900,     
-            "currency": "INR",
-            "description": "Premium Subscription",
-            "customer": {
-                "name": current_user["name"]
-            },
-            'notify':{
-                'sms': True,
-                'email': True
-            }
-        })
+        # Auto verify existing pending payment
+        link_id = current_user.get("payment_link_id")
 
-        if st.button("Upgrade to Premium"):
+        if (
+            link_id
+            and current_user.get("payment_status") == "pending"
+        ):
+            try:
+                payment = client.payment_link.fetch(link_id)
 
-            current_user["payment_link_id"] = payment_link["id"]
-            current_user["payment_status"] = "pending"
+                if payment["status"] == "paid":
 
-            users[st.session_state.user_email] = current_user
-            _save_users(users)
+                    current_user["plan"] = "premium"
+                    current_user["payment_status"] = "paid"
+                    current_user["subscription_expiry"] = expiry
 
-            st.link_button(
-                "Pay Now",
-                payment_link["short_url"]
-            )
-        
-        if st.button("verify Payment"):
-            link_id = current_user.get("payment_link_id")
+                    users[st.session_state.user_email] = current_user
+                    _save_users(users)
 
-            if not link_id:
-                st.error("No payment found.")
-                st.stop()
+                    st.success("Premium Activated!")
+                    st.rerun()
 
-            payment = client.payment_link.fetch(link_id)
+            except Exception as e:
+                st.error(f"Verification failed: {e}")
 
-            status = payment["status"]
-            if status == "paid":
-                current_user["plan"] = "premium"
-                current_user["payment_status"] = "paid"
-                current_user["subscription_expiry"] = expiry
+
+        # Show button only if user is not premium
+        if current_user.get("plan") != "premium":
+
+            if st.button("Upgrade to Premium - ₹99"):
+
+                payment_link = client.payment_link.create({
+                    "amount": 9900,
+                    "currency": "INR",
+                    "description": "Premium Subscription",
+                    "customer": {
+                        "name": current_user["name"]
+                    },
+                    "notify": {
+                        "sms": True,
+                        "email": True
+                    },
+                    "callback_url": "http://localhost:8501/",
+                    "callback_method": "get"
+                })
+
+                current_user["payment_link_id"] = payment_link["id"]
+                current_user["payment_status"] = "pending"
 
                 users[st.session_state.user_email] = current_user
                 _save_users(users)
 
-                st.success("Premium Activated!")
-
-            else:
-                st.warning(f"Payment Status: {status}")
-
+                st.link_button(
+                    "Pay Now",
+                    payment_link["short_url"]
+                )
         
     st.divider()
 
@@ -510,23 +517,24 @@ if (
     and used >= free_limit
 ):
     st.error("Your free trial has ended.")
-
+    payment_link = client.payment_link.create({
+                    'amount': 100,
+                    'currency':'INR',
+                    'accept_partial':False,
+                    'description':'Premium Subscription',
+                    'customer':{
+                        'name':'Customer',
+                        
+                    },
+                    'notify':{
+                        'sms':False,
+                        'email':False
+                    }
+                }) 
     st.link_button(
-        "Upgrade to Premium",
-        payment_link = client.payment_link.create({
-                'amount': 100,
-                'currency':'INR',
-                'accept_partial':False,
-                'description':'Premium Subscription',
-                'customer':{
-                    'name':'Customer',
-                    
-                },
-                'notify':{
-                    'sms':False,
-                    'email':False
-                }
-            }) 
+        "Upgrade to Premium - RS 99/-",
+        payment_link["short_url"]
+        
     )
 
     st.stop()

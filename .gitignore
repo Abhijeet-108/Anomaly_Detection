@@ -3,3 +3,4 @@ data/creditcard.csv
 data/*.csv
 env
 .env
+.streamlit/secrets.toml

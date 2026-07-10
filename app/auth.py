@@ -17,7 +17,6 @@ def init_session():
         "authenticated": False,
         "user_email": "",
         "user_name": "",
-        "user_age": None,
         "user_plan": "free",
         "subscription_expiry": None,
         "prediction_count": 0,
@@ -37,7 +36,6 @@ def init_session():
                 st.session_state.authenticated = True
                 st.session_state.user_email = email
                 st.session_state.user_name = user["name"]
-                st.session_state.user_age = user["age"]
 
                 st.session_state.user_plan = user.get("plan", "free")
                 st.session_state.subscription_expiry = user.get(
@@ -84,8 +82,6 @@ def signup(name: str, email: str, password: str, age: int):
         return False, "Enter a valid email address."
     if len(password) < 6:
         return False, "Password must be at least 6 characters."
-    if age < MIN_AGE:
-        return False, f"You must be at least {MIN_AGE} years old to sign up."
 
     users = _load_users()
     if email in users:
@@ -125,7 +121,6 @@ def login(email: str, password: str):
     st.session_state.authenticated = True
     st.session_state.user_email = email
     st.session_state.user_name = user["name"]
-    st.session_state.user_age = user["age"]
 
     st.session_state.user_plan = user.get("plan", "free")
     st.session_state.subscription_expiry = user.get("subscription_expiry")
@@ -145,7 +140,6 @@ def logout():
     st.session_state.authenticated = False
     st.session_state.user_email = ""
     st.session_state.user_name = ""
-    st.session_state.user_age = None
     st.session_state.user_plan = "free"
     st.session_state.subscription_expiry = None
 
@@ -187,13 +181,12 @@ def render_auth_page():
                 signup_email = st.text_input("Email", placeholder="you@example.com")
                 signup_password = st.text_input("Password", type="password")
                 signup_confirm = st.text_input("Confirm Password", type="password")
-                signup_age = st.number_input("Age", min_value=1, max_value=120, value=18, step=1)
                 submitted = st.form_submit_button("Create Account", use_container_width=True, type="primary")
                 if submitted:
                     if signup_password != signup_confirm:
                         st.error("Passwords do not match.")
                     else:
-                        ok, msg = signup(signup_name, signup_email, signup_password, int(signup_age))
+                        ok, msg = signup(signup_name, signup_email, signup_password)
                         if ok:
                             st.success(msg)
                         else:

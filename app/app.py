@@ -20,6 +20,7 @@ from auth import (
     _load_users,
     _save_users
 )
+from pdf_report import generate_summary_pdf
 
 APP_DIR = Path(__file__).resolve().parent
 MODEL_DIR = APP_DIR.parent / "notebook"
@@ -683,13 +684,40 @@ if uploaded is not None:
     st.markdown('<div class="section-title">Export Report</div>', unsafe_allow_html=True)
     export_cols = [c for c in result.columns if c != "anomaly_score"]
     csv_bytes = result[export_cols].to_csv(index=False).encode()
-    st.download_button(
-        "⬇️ Download Full Analysis (CSV)",
-        data=csv_bytes,
-        file_name="fraud_detection_report.csv",
-        mime="text/csv",
-        type="primary",
+    pdf_bytes = generate_summary_pdf(
+        file_name=uploaded.name,
+        user_name=st.session_state.user_name,
+        total=total,
+        anomaly_count=anomaly_count,
+        fraud_count=fraud_count,
+        anomaly_pct=anomaly_pct,
+        fraud_pct=fraud_pct,
+        avg_fraud_score=float(result["fraud_probability"].mean()),
+        risk=risk,
+        fig=fig,
+        fraud_probabilities=result["fraud_probability"],
     )
+    plt.close(fig)
+
+    col_csv, col_pdf = st.columns(2)
+    with col_csv:
+        st.download_button(
+            "⬇️ Download Full Analysis (CSV)",
+            data=csv_bytes,
+            file_name="fraud_detection_report.csv",
+            mime="text/csv",
+            type="primary",
+            use_container_width=True,
+        )
+    with col_pdf:
+        pdf_stem = Path(uploaded.name).stem
+        st.download_button(
+            "⬇️ Download Summary Report (PDF)",
+            data=pdf_bytes,
+            file_name=f"fraud_summary_{pdf_stem}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
 
 else:
     st.info("Upload a CSV file to start analysis.")

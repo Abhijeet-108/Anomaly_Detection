@@ -81,6 +81,18 @@
     "max_free_predictions": 3,
     "payment_link_id": "plink_T2FTaFJSUa1mmd",
     "payment_status": "paid",
-    "last_login": true
+    "last_login": false
+  },
+  "abhiraj2@gmail.com": {
+    "name": "Abhiraj",
+    "password": "b18c865c347ddd0383069d361a9fd704$99761f489e6bf2b04a1033fccdf9ad19adb49e419cbf8fc3bd4a1bf99ed8ee5d",
+    "age": 17,
+    "plan": "premium",
+    "subscription_expiry": "2026-08-09",
+    "prediction_count": 3,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_TBW3GBOefPnV6q",
+    "payment_status": "paid",
+    "last_login": false
   }
 }

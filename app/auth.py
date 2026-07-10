@@ -72,7 +72,7 @@ def _verify_password(password: str, stored: str) -> bool:
     return secrets.compare_digest(check.hex(), digest)
 
 
-def signup(name: str, email: str, password: str, age: int):
+def signup(name: str, email: str, password: str):
     name = name.strip()
     email = email.strip().lower()
 
@@ -90,7 +90,6 @@ def signup(name: str, email: str, password: str, age: int):
     users[email] = {
         "name": name,
         "password": _hash_password(password),
-        "age": age,
         
         "plan": "free",
         "subscription_expiry": None,

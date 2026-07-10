@@ -94,5 +94,16 @@
     "payment_link_id": "plink_TBW3GBOefPnV6q",
     "payment_status": "paid",
     "last_login": false
+  },
+  "abhijeetkr@gmail.com": {
+    "name": "Abhijeet Kumar",
+    "password": "d8c8d2687f072dfd3a0fbf0ddd377e3b$76d87f8628d818c23e9736c7f76144d956e44bf40b5faaa54e5a898e1904a657",
+    "plan": "premium",
+    "subscription_expiry": "2026-08-09",
+    "prediction_count": 3,
+    "max_free_predictions": 3,
+    "payment_link_id": "plink_TBs1zr4NI9E4TR",
+    "payment_status": "paid",
+    "last_login": true
   }
 }

@@ -347,13 +347,14 @@ with st.sidebar:
         st.markdown("You are on the **Premium** plan.")
     else:
         remaining = (
-            current_user.get("max_free_predictions", 3)
-            - current_user.get("prediction_count", 0)
+            current_user.get("max_free_predictions")
+            - current_user.get("prediction_count")
         )
 
-        st.warning(f"{remaining} free scans left")
+        st.warning(f"{remaining} free trials left")
+        st.caption("**Trials include scan and PDF downloads**")
+
         
-        # Auto verify existing pending payment
         link_id = current_user.get("payment_link_id")
 
         if (
@@ -519,7 +520,7 @@ if (
 ):
     st.error("Your free trial has ended.")
     payment_link = client.payment_link.create({
-                    'amount': 100,
+                    'amount': 99,
                     'currency':'INR',
                     'accept_partial':False,
                     'description':'Premium Subscription',
